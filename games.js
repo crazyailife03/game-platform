@@ -21,6 +21,14 @@ const gameData = {
         currentPrice:  1014,
         discount:      40,
         badge:         { type: 'sale', text: '-40%' },
+        images:        [
+            'images/dragonSoul/dragonsoul01.jpg',
+            'images/dragonSoul/dragonsoul02.jpg',
+            'images/dragonSoul/dragonsoul03.jpg',
+            'images/dragonSoul/dragonsoul04.jpg',
+            'images/dragonSoul/dragonsoul05.jpg',
+            'images/dragonSoul/dragonsoul06.jpg',
+        ],
     },
 
     '烈焰戰線': {
@@ -36,6 +44,14 @@ const gameData = {
         originalPrice: 890,
         currentPrice:  890,
         discount:      0,
+        images:        [
+            'images/flameFront/flamefront01.png',
+            'images/flameFront/flamefront02.png',
+            'images/flameFront/flamefront03.png',
+            'images/flameFront/flamefront04.png',
+            'images/flameFront/flamefront05.png',
+            'images/flameFront/flamefront06.png',
+        ]
     },
 
     '翡翠迷境': {
@@ -52,6 +68,14 @@ const gameData = {
         currentPrice:  580,
         discount:      0,
         badge:         { type: 'new', text: '新品' },
+        images:        [
+            'images/emeraldLabyrinth/emerald01.png',
+            'images/emeraldLabyrinth/emerald02.png',
+            'images/emeraldLabyrinth/emerald03.png',
+            'images/emeraldLabyrinth/emerald04.png',
+            'images/emeraldLabyrinth/emerald05.png',
+            'images/emeraldLabyrinth/emerald06.png',
+        ]
     },
 
     '帝國霸業 III': {
@@ -68,6 +92,14 @@ const gameData = {
         currentPrice:  516,
         discount:      60,
         badge:         { type: 'sale', text: '-60%' },
+        images:        [
+            'images/ImperialHegemony/kingdom01.png',
+            'images/ImperialHegemony/kingdom02.png',
+            'images/ImperialHegemony/kingdom03.png',
+            'images/ImperialHegemony/kingdom04.png',
+            'images/ImperialHegemony/kingdom05.png',
+            'images/ImperialHegemony/kingdom06.png',
+        ]
     },
 
     '虛空行者': {
@@ -83,6 +115,14 @@ const gameData = {
         originalPrice: 1790,
         currentPrice:  1790,
         discount:      0,
+        images:         [
+            'images/voidWalker/void01.png',
+            'images/voidWalker/void02.png',
+            'images/voidWalker/void03.png',
+            'images/voidWalker/void04.png',
+            'images/voidWalker/void05.png',
+            'images/voidWalker/void06.png',
+        ]
     },
 
     '都市天際線 II': {
@@ -99,6 +139,14 @@ const gameData = {
         currentPrice:  833,
         discount:      30,
         badge:         { type: 'sale', text: '-30%' },
+        images:        [
+            'images/skyLine/skyline01.png',
+            'images/skyLine/skyline02.png',
+            'images/skyLine/skyline03.png',
+            'images/skyLine/skyline04.png',
+            'images/skyLine/skyline05.png',
+            'images/skyLine/skyline06.png',
+        ]
     },
     '使命召喚：末日邊緣': {
         bg:            'linear-gradient(135deg, #4a148c, #880e4f, #b71c1c)',
@@ -113,6 +161,14 @@ const gameData = {
         originalPrice: 1690,
         currentPrice:  1183,
         discount:      30,
+        images:        [
+            'images/callofduty/cod01.png',
+            'images/callofduty/cod06.png',
+            'images/callofduty/cod05.png',
+            'images/callofduty/cod04.png',
+            'images/callofduty/cod03.png',
+            'images/callofduty/cod02.png',
+        ]
     },
     '黑暗之魂：重生': {
         bg:            'linear-gradient(135deg, #212121, #424242, #616161)',
@@ -128,6 +184,14 @@ const gameData = {
         currentPrice:  1790,
         discount:      0,
         badge:         { type: 'new', text: '-25%' },
+        images:        [
+            'images/darksoul/darksoul01.png',
+            'images/darksoul/darksoul02.png',
+            'images/darksoul/darksoul03.png',
+            'images/darksoul/darksoul04.png',
+            'images/darksoul/darksoul05.png',
+            'images/darksoul/darksoul06.png',
+        ]
     },
 
     '星際幻域：黎明紀元': {
@@ -191,6 +255,7 @@ const gameData = {
         currentPrice:  null,
         discount:      0,
         unreleased:    true,
+        images: 'images/upcomming/abyssofeyes.png'
     },
 
     '量子迷途': {
@@ -207,6 +272,7 @@ const gameData = {
         currentPrice:  null,
         discount:      0,
         unreleased:    true,
+        images: 'images/upcomming/quantom.png'
     },
 
     '鐵血軍團': {
@@ -223,6 +289,7 @@ const gameData = {
         currentPrice:  null,
         discount:      0,
         unreleased:    true,
+        images: 'images/upcomming/ironcross.png'
     },
 
     '永夜編年史': {
@@ -239,6 +306,7 @@ const gameData = {
         currentPrice:  null,
         discount:      0,
         unreleased:    true,
+        images: 'images/upcomming/everynight.png'
     },
 };
 
@@ -254,44 +322,26 @@ const featuredGames = [
     {
         name:      '星際幻域：黎明紀元',
         slideBg:   'linear-gradient(135deg, #0a1628 0%, #1a0a2e 50%, #0d1f3c 100%)',
+        heroImage: 'images/nocomminggame/spaceside.jpg',
         badgeType: 'tag-new',
         badgeText: '新品上市',
         rating:    { stars: 5, text: '極度好評 (12,847)' },
-        artHTML: `
-            <div class="game-art art-1">
-                <div class="planet"></div>
-                <div class="orbit orbit-1"></div>
-                <div class="orbit orbit-2"></div>
-                <div class="orbit orbit-3"></div>
-                <div class="spaceship"></div>
-            </div>`,
     },
     {
         name:      '暗影獵手：永恆之戰',
         slideBg:   'linear-gradient(135deg, #1a0505 0%, #2d0a0a 50%, #1a1005 100%)',
+        heroImage: 'images/nocomminggame/shdowhunter.jpg',
         badgeType: 'tag-hot',
         badgeText: '熱門',
         rating:    { stars: 4, text: '大多好評 (8,432)' },
-        artHTML: `
-            <div class="game-art art-2">
-                <div class="sword"></div>
-                <div class="fire-particles"></div>
-                <div class="shield"></div>
-            </div>`,
     },
     {
         name:      '霓虹突擊：零號協議',
         slideBg:   'linear-gradient(135deg, #050a1a 0%, #0a1a2d 50%, #051a0a 100%)',
+        heroImage: 'images/nocomminggame/neonshot.png',
         badgeType: 'tag-free',
         badgeText: '免費遊玩',
         rating:    { stars: 5, text: '壓倒性好評 (45,291)' },
-        artHTML: `
-            <div class="game-art art-3">
-                <div class="hex hex-1"></div>
-                <div class="hex hex-2"></div>
-                <div class="hex hex-3"></div>
-                <div class="crosshair"></div>
-            </div>`,
     },
 ];
 

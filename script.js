@@ -55,9 +55,15 @@ function renderCarousel() {
             priceHTML = `<span class="current-price">${formatPrice(g.currentPrice)}</span>`;
         }
 
+        const slideBgStyle = f.heroImage
+            ? `background: ${f.slideBg};`
+            : `background: ${f.slideBg};`;
+        const heroImgHTML = f.heroImage
+            ? `<div class="slide-hero-img" style="background-image:url('${f.heroImage}');"></div>` : '';
+
         return `
         <div class="carousel-slide${i === 0 ? ' active' : ''}">
-            <div class="slide-bg" style="background: ${f.slideBg};"><div class="slide-particles"></div></div>
+            <div class="slide-bg" style="${slideBgStyle}">${heroImgHTML}<div class="slide-particles"></div></div>
             <div class="slide-content">
                 <div class="slide-info">
                     <div class="game-tags">
@@ -78,7 +84,6 @@ function renderCarousel() {
                         <button class="btn-secondary slide-wish-btn" data-game="${escAttr(f.name)}">加入願望清單</button>
                     </div>
                 </div>
-                <div class="slide-visual">${f.artHTML || ''}</div>
             </div>
         </div>`;
     }).join('');
@@ -118,10 +123,15 @@ function renderGameGrid() {
             ? '<span class="new-price" style="color:var(--accent-3)">免費遊玩</span>'
             : `${oldPriceHTML}<span class="new-price">${formatPrice(g.currentPrice)}</span>`;
 
+        const coverImg = g.images && g.images[0];
+        const artStyle = coverImg
+            ? `background-image: url('${coverImg}');`
+            : `background: ${g.bg};`;
+
         return `
         <div class="game-card" data-category="${g.category}" data-game="${escAttr(name)}" style="animation-delay:${i * 0.05}s">
             <div class="card-image">
-                <div class="card-art" style="background: ${g.bg};"></div>
+                <div class="card-art" style="${artStyle}"></div>
                 <div class="card-overlay">
                     <button class="card-cart-btn" data-game="${escAttr(name)}" title="加入購物車">
                         ${SVG.cart}<span>加入購物車</span>
@@ -151,7 +161,7 @@ function renderUpcomingGrid() {
         if (!g) return '';
         return `
         <div class="upcoming-card" data-game="${escAttr(name)}">
-            <div class="upcoming-art" style="background: ${g.bg};">
+            <div class="upcoming-art" style="${g.images ? `background-image:url('${g.images}');background-size:cover;background-position:center;` : `background:${g.bg};`}">
                 <div class="upcoming-overlay">
                     <span class="release-date">${g.date}</span>
                 </div>
@@ -305,7 +315,7 @@ function renderCartPage() {
         totalOrig += d.originalPrice; totalCur += d.currentPrice;
         const saved = d.originalPrice - d.currentPrice;
         return `<div class="cart-item" style="animation-delay:${idx*0.05}s">
-            <div class="cart-item-art" style="background:${d.bg};"></div>
+            <div class="cart-item-art" style="${d.images?.[0] ? `background-image:url('${d.images[0]}');background-size:cover;background-position:center;` : `background:${d.bg};`}"></div>
             <div class="cart-item-info">
                 <div class="cart-item-title">${item.name}</div>
                 <div class="cart-item-tags">${d.tags.slice(0,3).map(t=>`<span>${t}</span>`).join('')}</div>
@@ -385,7 +395,7 @@ function renderWishlistPage() {
             : `<button class="wishlist-add-cart-btn" data-game="${escAttr(item.name)}" data-action="cart">加入購物車</button>`;
         return `<div class="wishlist-item" style="animation-delay:${idx*0.04}s">
             <div class="wishlist-item-date">加入於 ${item.addedAt||'---'}</div>
-            <div class="wishlist-item-art" style="background:${d.bg};"></div>
+            <div class="wishlist-item-art" style="${d.images?.[0] ? `background-image:url('${d.images[0]}');background-size:cover;background-position:center;` : `background:${d.bg};`}"></div>
             <div class="wishlist-item-info">
                 <div class="wishlist-item-title">${item.name}</div>
                 <div class="wishlist-item-tags">${d.tags.slice(0,3).map(t=>`<span>${t}</span>`).join('')}</div>
@@ -480,7 +490,27 @@ function openModal(name) {
     const data = gameData[name];
     if (!data) return;
     currentModalGame = name;
-    document.getElementById('modalHero').style.background = data.bg;
+    // Hero image carousel
+    const heroEl = document.getElementById('modalHero');
+    const heroImg = document.getElementById('modalHeroImg');
+    const hasImages = data.images && data.images.length > 0;
+    modalHeroImages = hasImages ? data.images : [];
+    modalHeroIndex = 0;
+
+    if (hasImages) {
+        heroEl.classList.remove('no-images');
+        heroImg.style.backgroundImage = `url('${data.images[0]}')`;
+        heroImg.style.background = '';
+        heroImg.style.backgroundImage = `url('${data.images[0]}')`;
+        heroImg.style.backgroundSize = 'cover';
+        heroImg.style.backgroundPosition = 'center';
+        document.getElementById('modalHeroCounter').textContent = `1 / ${data.images.length}`;
+    } else {
+        heroEl.classList.add('no-images');
+        heroImg.style.backgroundImage = '';
+        heroImg.style.background = data.bg;
+    }
+
     document.getElementById('modalTitle').textContent = name;
     document.getElementById('modalDesc').textContent = data.desc;
     document.getElementById('modalDev').textContent = data.dev;
@@ -507,15 +537,57 @@ function openModal(name) {
     if (isInWishlist(name)) { mwb.innerHTML = '&#9829; 已在願望清單'; mwb.classList.add('wish-active'); }
     else { mwb.innerHTML = '&#9825; 加入願望清單'; mwb.classList.remove('wish-active'); }
 
-    document.getElementById('screenshotGrid').innerHTML = Array(6).fill(0).map((_,i) =>
-        `<div style="background:${data.bg};opacity:${0.5+i*0.1};"></div>`
-    ).join('');
+    // Screenshot grid
+    const ssGrid = document.getElementById('screenshotGrid');
+    if (hasImages) {
+        ssGrid.innerHTML = data.images.map((src, i) =>
+            `<div class="ss-thumb${i === 0 ? ' active' : ''}" data-index="${i}" style="background-image:url('${src}');"></div>`
+        ).join('');
+        ssGrid.querySelectorAll('.ss-thumb').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                modalGoToImage(parseInt(thumb.dataset.index));
+            });
+        });
+    } else {
+        ssGrid.innerHTML = Array(6).fill(0).map((_,i) =>
+            `<div class="ss-thumb" style="background:${data.bg};opacity:${0.5+i*0.1};"></div>`
+        ).join('');
+    }
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    // Start hero auto-play if images exist
+    clearInterval(modalHeroTimer);
+    if (hasImages && data.images.length > 1) {
+        modalHeroTimer = setInterval(() => modalGoToImage(modalHeroIndex + 1), 5000);
+    }
 }
 
-function closeModal() { modal.classList.remove('active'); document.body.style.overflow = ''; currentModalGame = null; }
+function closeModal() { modal.classList.remove('active'); document.body.style.overflow = ''; currentModalGame = null; clearInterval(modalHeroTimer); }
+
+// Modal hero image carousel state & controls
+let modalHeroImages = [], modalHeroIndex = 0, modalHeroTimer;
+
+function modalGoToImage(index) {
+    if (!modalHeroImages.length) return;
+    modalHeroIndex = (index + modalHeroImages.length) % modalHeroImages.length;
+    const heroImg = document.getElementById('modalHeroImg');
+    heroImg.style.opacity = '0';
+    setTimeout(() => {
+        heroImg.style.backgroundImage = `url('${modalHeroImages[modalHeroIndex]}')`;
+        heroImg.style.opacity = '1';
+    }, 200);
+    document.getElementById('modalHeroCounter').textContent = `${modalHeroIndex + 1} / ${modalHeroImages.length}`;
+    // Update active thumbnail
+    document.querySelectorAll('.ss-thumb').forEach((t, i) => t.classList.toggle('active', i === modalHeroIndex));
+    // Reset auto-play
+    clearInterval(modalHeroTimer);
+    modalHeroTimer = setInterval(() => modalGoToImage(modalHeroIndex + 1), 5000);
+}
+
+document.getElementById('modalHeroPrev').addEventListener('click', e => { e.stopPropagation(); modalGoToImage(modalHeroIndex - 1); });
+document.getElementById('modalHeroNext').addEventListener('click', e => { e.stopPropagation(); modalGoToImage(modalHeroIndex + 1); });
 
 document.getElementById('modalClose').addEventListener('click', closeModal);
 modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
