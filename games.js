@@ -262,7 +262,7 @@ const gameData = {
         bg:            'linear-gradient(135deg, #2d1b69, #11998e, #38ef7d)',
         tags:          ['解謎', '平台', '科幻'],
         category:      'adventure',
-        desc:          '跨維度解謎平台跳躍遊戲，在量子世界中尋找出路。',
+        desc:          '跨越維度解謎平台跳躍遊戲，在量子世界中尋找出路。',
         dev:           'Quantum Pixel',
         pub:           'Quantum Pixel',
         date:          '2026.06.22',
